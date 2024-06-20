@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- <preference for="ForMage\Learning\Api\SizeInterface" type="ForMage\Learning\Model\SizeGreat" /> -->
+    <preference for="ForMage\Learning\Api\SizeInterface" type="ForMage\Learning\Model\SizeSmall"/>
+    <!-- <preference for="ForMage\Learning\Api\ColorInterface" type="ForMage\Learning\Model\ColorBlack" /> -->
+    <preference for="ForMage\Learning\Api\ColorInterface" type="ForMage\Learning\Model\ColorWhite"/>
+    <preference for="ForMage\Learning\Api\MaterialInterface" type="ForMage\Learning\Model\MaterialSyntetic"/>
+
+    <!--Virtual Types-->
+    <!--A classe "ForMage\Learning\Model\SizeGreat" será atacada-->
+    <virtualType name="typeMaterial" type="ForMage\Learning\Model\SizeGreat">
+        <arguments>
+            <argument name="material" xsi:type="object">ForMage\Learning\Model\MaterialSyntetic</argument>
+        </arguments>
+    </virtualType>
+
+    <!--Arguments Types-->
+    <!--name: A classe que será atacada-->
+    <type name="ForMage\Learning\Model\Product\Shoe">
+        <arguments>
+            <!--Modificando o argumento "color" da classe Shoe-->
+            <argument name="color" xsi:type="object">ForMage\Learning\Model\ColorBlack</argument>
+            <!--Modificando o argumento "size" da classe Shoe-->
+            <argument name="size" xsi:type="object">typeMaterial</argument>
+        </arguments>
+    </type>
+
+    <type name="ForMage\Learning\Model\Product\Shirt">
+        <arguments>
+            <!--Modificando o argumento "typeText" da classe Shirt-->
+            <argument name="typeText" xsi:type="string">My string in argument type</argument>
+            <!--Modificando o argumento "typeNumber" da classe Shirt-->
+            <argument name="typeNumber" xsi:type="number">1998</argument>
+            <argument name="typeArray" xsi:type="array">
+                <item name="customName" xsi:type="string">Antonio da Silva</item>
+                <item name="customColor" xsi:type="string">Purple</item>
+            </argument>
+            <argument name="typeInitParameter" xsi:type="init_parameter">
+                ForMage\Learning\Model\Product\Shirt::MY_CONSTANT
+            </argument>
+        </arguments>
+    </type>
+    <!--Type name: classe alvo que será atacada-->
+    <!--Plugin name: nome do plugin-->
+    <!--Plugin type: Caminho onde estará o novo plugin-->
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="formage-learning-plugin" type="ForMage\Learning\Plugin\PluginOne" sortOrder="1" disabled="false"/>
+    </type>
+</config>
